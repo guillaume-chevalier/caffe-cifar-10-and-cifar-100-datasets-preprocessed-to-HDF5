@@ -13,5 +13,5 @@ My script, however, has many python dependencies, if you can `import caffe` in p
 ### Not shuffling datasets
 If you do not want the datasets to be shuffled, my scripts can be a good starting point for the conversion of the cifar 10 and 100 datasets to the HDF5 caffe format. You may refer to this interesting tutorial to understand better how to do the conversion: https://github.com/BVLC/caffe/blob/master/examples/02-brewing-logreg.ipynb
 
-## Link to original dataset
+## Link to original datasets
 https://www.cs.toronto.edu/~kriz/cifar.html
