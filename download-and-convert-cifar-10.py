@@ -44,12 +44,6 @@ if not os.path.exists(cifar_caffe_directory):
         fo.close()
         return dict
 
-#     def labels_to_one_hot_nodes(labels):
-#         lab = np.zeros((len(labels), 10))
-#         for i in range(len(labels)):
-#             lab[i, labels[i]] = 1
-#         return lab
-
     def load_train_and_shuffle(train_batches):
         data = []
         labels = []
@@ -94,19 +88,13 @@ if not os.path.exists(cifar_caffe_directory):
     train_filename = os.path.join(cifar_caffe_directory, 'train.h5')
     test_filename = os.path.join(cifar_caffe_directory, 'test.h5')
 
-    # "train.txt" is an "HDF5DataLayer source"
-    # containing a list of the HDF5 filenames. See:
-    # https://github.com/BVLC/caffe/blob/master/examples/02-brewing-logreg.ipynb
-
     comp_kwargs = {'compression': 'gzip', 'compression_opts': 1}
-
     # Train
     with h5py.File(train_filename, 'w') as f:
         f.create_dataset('data', data=Xt, **comp_kwargs)
         f.create_dataset('label', data=yt.astype(np.int_), **comp_kwargs)
     with open(os.path.join(cifar_caffe_directory, 'train.txt'), 'w') as f:
         f.write(train_filename + '\n')
-
     # Test
     with h5py.File(test_filename, 'w') as f:
         f.create_dataset('data', data=Xt, **comp_kwargs)
