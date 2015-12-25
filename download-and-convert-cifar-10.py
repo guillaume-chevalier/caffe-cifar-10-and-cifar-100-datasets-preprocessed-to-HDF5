@@ -82,6 +82,8 @@ if not os.path.exists(cifar_caffe_directory):
     print("The conventional blob dimensions for batches of image data "
           "are number N x channel K x height H x width W.\n")
 
+    print("Data is fully loaded, now truly converting.")
+
     os.makedirs(cifar_caffe_directory)
     train_filename = os.path.join(cifar_caffe_directory, 'train.h5')
     test_filename = os.path.join(cifar_caffe_directory, 'test.h5')
