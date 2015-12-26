@@ -11,9 +11,9 @@ import h5py
 print("")
 
 print("Downloading...")
-if not os.path.exists("cifar-10-python.tar.gz"):
+if not os.path.exists("cifar-100-python.tar.gz"):
     call(
-        "wget http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz",
+        "wget http://www.cs.toronto.edu/~kriz/cifar-100-python.tar.gz",
         shell=True
     )
     print("Downloading done.\n")
@@ -22,10 +22,10 @@ else:
 
 
 print("Extracting...")
-cifar_python_directory = os.path.abspath("cifar-10-batches-py")
+cifar_python_directory = os.path.abspath("cifar-100-python")
 if not os.path.exists(cifar_python_directory):
     call(
-        "tar -zxvf cifar-10-python.tar.gz",
+        "tar -zxvf cifar-100-python.tar.gz",
         shell=True
     )
     print("Extracting successfully done to {}.".format(cifar_python_directory))
@@ -34,7 +34,7 @@ else:
 
 
 print("Converting...")
-cifar_caffe_directory = os.path.abspath('cifar_10_caffe_hdf5/')
+cifar_caffe_directory = os.path.abspath('cifar_100_caffe_hdf5/')
 if not os.path.exists(cifar_caffe_directory):
 
     def unpickle(file):
@@ -50,28 +50,34 @@ if not os.path.exists(cifar_caffe_directory):
         )
         return data, labels
 
-    def load_data(train_batches):
+    def load_data(train_file):
         data = []
         labels = []
-        for data_batch_i in train_batches:
-            d = unpickle(
-                os.path.join(cifar_python_directory, data_batch_i)
-            )
-            data.append(d['data'])
-            labels.append(np.array(d['labels']))
-        # Merge training batches on their first dimension
-        data = np.concatenate(data)
-        labels = np.concatenate(labels)
-        length = len(labels)
 
-        data, labels = shuffle_data(data, labels)
-        return data.reshape(length, 3, 32, 32), labels
+        d = unpickle(
+            os.path.join(cifar_python_directory, train_file)
+        )
 
-    X, y = load_data(
-        ["data_batch_{}".format(i) for i in range(1, 6)]
-    )
+        data = d['data']
+        coarse_labels = d['coarse_labels']
+        fine_labels = d['fine_labels']
+        length = len(d['fine_labels'])
 
-    Xt, yt = load_data(["test_batch"])
+        data, labels = shuffle_data(
+            data,
+            np.array(zip(coarse_labels, fine_labels))
+        )
+        coarse_labels, fine_labels = zip(*labels.tolist())
+
+        return (
+            data.reshape(length, 3, 32, 32),
+            np.array(coarse_labels),
+            np.array(fine_labels)
+        )
+
+    X, y_c, y_f = load_data("train")
+
+    Xt, yt_c, yt_f = load_data("test")
 
     print("INFO: each dataset's element are of shape 3*32*32:")
     print('"print(X.shape)" --> "{}"\n'.format(X.shape))
@@ -89,13 +95,15 @@ if not os.path.exists(cifar_caffe_directory):
     # Train
     with h5py.File(train_filename, 'w') as f:
         f.create_dataset('data', data=X, **comp_kwargs)
-        f.create_dataset('label', data=y.astype(np.int_), **comp_kwargs)
+        f.create_dataset('label_coarse', data=y_c.astype(np.int_), **comp_kwargs)
+        f.create_dataset('label_fine', data=y_f.astype(np.int_), **comp_kwargs)
     with open(os.path.join(cifar_caffe_directory, 'train.txt'), 'w') as f:
         f.write(train_filename + '\n')
     # Test
     with h5py.File(test_filename, 'w') as f:
         f.create_dataset('data', data=Xt, **comp_kwargs)
-        f.create_dataset('label', data=yt.astype(np.int_), **comp_kwargs)
+        f.create_dataset('label_coarse', data=yt_c.astype(np.int_), **comp_kwargs)
+        f.create_dataset('label_fine', data=yt_f.astype(np.int_), **comp_kwargs)
     with open(os.path.join(cifar_caffe_directory, 'test.txt'), 'w') as f:
         f.write(test_filename + '\n')
 

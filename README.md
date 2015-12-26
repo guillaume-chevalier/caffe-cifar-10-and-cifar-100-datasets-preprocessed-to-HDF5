@@ -34,7 +34,7 @@ From the Caffe documentation:
 The labels are integer (not length 10 vectors with one-hot encoding). As an example, caffe does the encoding itself with the `SoftmaxWithLoss` layer when the previous layer is an `InnerProduct` with setting `num_output=10`.
 
 ### cifar-100
-[TODO]
+The data has the same shape than in the cifar-10 dataset. However, the dataset has two labels per image: while building caffe layers, the `label` data will not exist in the HDF5 format, it will be `label_coarse` and `label_fine`. Please refer to the original datasets' page for info about the number of classes in each coarse and fine labels. Also note that I did NOT tested the cifar-100 dataset, only the cifar-10. 
 
 ## Link to original datasets
 https://www.cs.toronto.edu/~kriz/cifar.html
