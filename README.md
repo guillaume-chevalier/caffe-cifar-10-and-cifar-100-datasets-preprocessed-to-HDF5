@@ -1,24 +1,18 @@
 # Caffe cifar-10 and cifar-100 datasets preprocessed to HDF5 (can be opened in PyCaffe with h5py)
-Both deep learning datasets can be imported in python directly with h5py (HDF5 format) or converted with a script to then be imported.
+Both deep learning datasets can be imported in python directly with h5py (HDF5 format) once downloaded and converted by the script.
 
 ***NOTE: The training set has been shuffled and put in a big single batch, it was originally split into 5 files and not shuffled. The test set has also been shuffled, but remained separated from the training set.***
 
 
-## How to use
+## Usage
 
-### Method A: Direct import in caffe
-You can simply download and unzip the zip file for the desired dataset and ignore the rest of this repository.
-
-### Method B: Download and convert manually with the Python script
-You can run my python script for the desired dataset if you already got caffe and pycaffe installed. This way, you will not need to download the whole repository, but only the desired python script.
-
-As an example, for the cifar-10 dataset, you can run the following commands in a terminal once in a folder where you want to download the datasets:
+If you got the requirements or got caffe installed, you can simply do this, with the cifar-10 dataset as an example:
 
 >wget https://raw.githubusercontent.com/guillaume-chevalier/Caffe-cifar-10-and-cifar-100-datasets-preprocessed-to-HDF5/master/download-and-convert-cifar-10.py
 
 >python download-and-convert-cifar-10.py
 
-#### Not shuffling datasets
+### Not shuffling datasets
 If you do not want the datasets to be shuffled nor merged, my scripts can be a good starting point for the complete conversion of the cifar 10 and 100 datasets to the HDF5 caffe format. You may refer to this interesting tutorial to understand better how to do the conversion: https://github.com/BVLC/caffe/blob/master/examples/02-brewing-logreg.ipynb
 
 
@@ -34,7 +28,7 @@ From the Caffe documentation:
 The labels are integer (not length 10 vectors with one-hot encoding). As an example, caffe does the encoding itself with the `SoftmaxWithLoss` layer when the previous layer is an `InnerProduct` with setting `num_output=10`.
 
 ### cifar-100
-The data has the same shape than in the cifar-10 dataset. However, the dataset has two labels per image: while building caffe layers, the `label` data will not exist in the HDF5 format, it will be `label_coarse` and `label_fine`. Please refer to the original datasets' page for info about the number of classes in each coarse and fine labels. Also note that I did NOT tested the cifar-100 dataset, only the cifar-10. 
+The data has the same shape than in the cifar-10 dataset. However, the dataset has two labels per image: while building caffe layers, the `label` data will not exist in the HDF5 format, it will be `label_coarse` and `label_fine`. Please refer to the original datasets' page for info about the number of classes in each coarse and fine labels. Also note that I did NOT tested the cifar-100 dataset, only the cifar-10.
 
 ## Link to original datasets
 https://www.cs.toronto.edu/~kriz/cifar.html
