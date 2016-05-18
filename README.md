@@ -1,7 +1,7 @@
 # Caffe cifar-10 and cifar-100 datasets preprocessed to HDF5 (can be opened in PyCaffe with h5py)
 Both deep learning datasets can be imported in python directly with h5py (HDF5 format) once downloaded and converted by the script.
 
-***NOTE: The training set has been shuffled and put in a big single batch, it was originally split into 5 files and not shuffled. The test set has also been shuffled, but remained separated from the training set.***
+***NOTE: For each dataset (separately), the training set has been shuffled and put in a single batch, it was originally split into 5 files and not shuffled. Test sets has also been shuffled, but remained separated from the training sets.***
 
 
 ## Usage
