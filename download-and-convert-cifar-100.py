@@ -4,6 +4,7 @@ from subprocess import call
 
 import numpy as np
 import sklearn
+import sklearn.cross_validation
 import sklearn.linear_model
 
 import h5py
